@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="./img//tictakToe.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Tic Tac Toe | Created by Boburov.dev</title>
+  </head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    *:focus {
+      outline: 4px dashed goldenrod;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      justify-content: center;
+      background-color: rgb(0, 28, 111);
+    }
+    .container {
+      height: 500px;
+      height: 300px;
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .btn {
+      width: 150px;
+      background-color: #0869fb;
+      height: 150px;
+      cursor: pointer;
+      display: flex;
+      font-size: 0;
+      align-items: center;
+      justify-content: center;
+      border-radius: 30px;
+      box-shadow: 0 0 10px #0869fb;
+      border: none;
+    }
+    .cross {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      /* transform: rotate(45deg); */
+      justify-content: center;
+      height: 100%;
+    }
+    .cross::before {
+      transform: rotate(45deg);
+      width: 90%;
+      position: absolute;
+      height: 20px;
+      align-self: center;
+      border-radius: 20px;
+      content: "";
+      background-color: #f70000;
+    }
+    .cross::after {
+      transform: rotate(40deg);
+      border-radius: 20px;
+      width: 20px;
+      align-self: center;
+      position: absolute;
+      height: 90%;
+      content: "";
+      background-color: #f70000;
+    }
+
+    .circle {
+      width: 80%;
+      height: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: rgb(251, 255, 0);
+    }
+    .circle::before {
+      width: 80%;
+      height: 80%;
+      content: "";
+      border-radius: 50%;
+      background-color: #0869fb;
+    }
+    .res {
+      width: 50px;
+      border: none;
+      font-size: 40px;
+      font-weight: 700;
+      color: wheat;
+      box-shadow: 0 0 10px gold, 0 0 15px goldenrod, 0 0 20px goldenrod;
+      height: 50px;
+      background-color: goldenrod;
+      border-radius: 10px;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: 700;
+      width: 50%;
+      text-align: center;
+      font-family: "Courier New", Courier, monospace;
+      color: goldenrod;
+    }
+
+    .scores {
+      width: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .scores span {
+      font-size: 30px;
+      font-weight: 800;
+      font-family: monospace;
+      color: gold;
+    }
+
+    .scores img {
+      width: 30px;
+      mix-blend-mode: color-burn;
+    }
+
+    .overlay {
+      display: flex;
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      background-color: rgba(0, 0, 0, 0.663);
+    }
+
+    .modal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      justify-content: space-evenly;
+      border-radius: 20px;
+      text-align: center;
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      background-color: white;
+      z-index: 500;
+      bottom: 10%;
+    }
+    .modal h1 {
+      font-family: "Courier New", Courier, monospace;
+      text-align: center;
+      font-size: 40px;
+      color: #0869fb;
+    }
+    .modal .modalBtn {
+      width: 200px;
+      height: 50px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 25px;
+      background-color: rgb(255, 140, 0);
+      border-radius: 10px;
+    }
+
+    @media only screen and (max-width: 500px) {
+      body {
+        transform: scale(0.6);
+      }
+      h1 {
+        font-size: 20px;
+      }
+      .scores {
+        width: 50%;
+      }
+    }
+
+    .dn {
+      display: none;
+    }
+  </style>
+  <body>
+    <h1>Tic Tac Toe Game created by Boburov</h1>
+    <div class="overlay">
+      <div class="modal">
+        <h1></h1>
+        <button class="modalBtn">Thank You</button>
+      </div>
+    </div>
+
+    <div class="scores">
+      <span class="scorre"></span>
+      <button class="res">&circlearrowleft;</button>
+      <span class="scorre1"></span>
+    </div>
+    <div class="container">
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+      <button class="btn"></button>
+    </div>
+    <script>
+      const button = document.querySelectorAll(".btn");
+      const scorre = document.querySelector(".scorre");
+      const scorre1 = document.querySelector(".scorre1");
+      const overlay = document.querySelector(".overlay");
+      const modal = document.querySelector(".modal");
+      const modalBtn = document.querySelector(".modalBtn");
+      overlay.classList.add("dn");
+      scorre.textContent = 0;
+      scorre1.textContent = 0;
+      let cross = "circle";
+      let count = 0;
+      let x = "0";
+      let res = document.querySelector(".res");
+      res.addEventListener("click", clearAll);
+      function clearAll() {
+        button.forEach((btn) => {
+          btn.innerHTML = "";
+          cross = "circle";
+          count = 0;
+          x = "0";
+        });
+      }
+      modalBtn.addEventListener("click", () => {
+        overlay.classList.add("dn");
+      });
+      overlay.addEventListener("click", () => overlay.classList.add("dn"));
+
+      button.forEach((btn) => {
+        btn.addEventListener("click", (elem) => {
+          if (btn.children.length === 0) {
+            x = x === "x" ? "0" : "x";
+            cross = cross === "circle" ? "cross" : "circle";
+            btn.textContent = x;
+            const div = document.createElement("div");
+            div.classList.add(cross);
+            count++;
+            btn.appendChild(div);
+          }
+          if (
+            (button[0].textContent === "x" &&
+              button[1].textContent === "x" &&
+              button[2].textContent === "x") ||
+            (button[3].textContent === "x" &&
+              button[4].textContent === "x" &&
+              button[5].textContent === "x") ||
+            (button[6].textContent === "x" &&
+              button[7].textContent === "x" &&
+              button[8].textContent === "x") ||
+            // col if
+            (button[0].textContent === "x" &&
+              button[3].textContent === "x" &&
+              button[6].textContent === "x") ||
+            (button[1].textContent === "x" &&
+              button[4].textContent === "x" &&
+              button[7].textContent === "x") ||
+            (button[2].textContent === "x" &&
+              button[5].textContent === "x" &&
+              button[8].textContent === "x") ||
+            (button[0].textContent === "x" &&
+              button[4].textContent === "x" &&
+              button[8].textContent === "x") ||
+            (button[2].textContent === "x" &&
+              button[4].textContent === "x" &&
+              button[6].textContent === "x")
+          ) {
+            modal.children[0].innerHTML = `X is Winner`;
+            overlay.classList.remove("dn");
+            clearAll();
+            scorre.textContent++;
+          } else if (
+            (button[0].textContent === "0" &&
+              button[1].textContent === "0" &&
+              button[2].textContent === "0") ||
+            (button[3].textContent === "0" &&
+              button[4].textContent === "0" &&
+              button[5].textContent === "0") ||
+            (button[6].textContent === "0" &&
+              button[7].textContent === "0" &&
+              button[8].textContent === "0") ||
+            // col if
+            (button[0].textContent === "0" &&
+              button[3].textContent === "0" &&
+              button[6].textContent === "0") ||
+            (button[1].textContent === "0" &&
+              button[4].textContent === "0" &&
+              button[7].textContent === "0") ||
+            (button[2].textContent === "0" &&
+              button[5].textContent === "0" &&
+              button[8].textContent === "0") ||
+            (button[0].textContent === "0" &&
+              button[4].textContent === "0" &&
+              button[8].textContent === "0") ||
+            (button[2].textContent === "0" &&
+              button[4].textContent === "0" &&
+              button[6].textContent === "0")
+          ) {
+            modal.children[0].innerHTML = `0<br/> is Winner`;
+            overlay.classList.remove("dn");
+            clearAll();
+          } else if (count > 8) {
+            modal.children[0].innerHTML = `Tie Game`;
+            overlay.classList.remove("dn");
+            clearAll();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
